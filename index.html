@@ -338,16 +338,204 @@
   }
   .footer a { color: var(--accent); text-decoration: none; }
 
+  /* Welcome screen */
+  #welcome-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    text-align: center;
+    gap: 0;
+  }
+  .welcome-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    overflow: hidden;
+  }
+  .welcome-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .welcome-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+  .welcome-title {
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+  .welcome-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+  .input-group label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .name-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    padding: 12px 16px;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+  .name-input:focus { border-color: var(--accent); }
+  .name-input::placeholder { color: var(--muted); }
+  .diff-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 1.8rem;
+    text-align: left;
+  }
+  .diff-group label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .diff-group select {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  .btn-start {
+    width: 100%;
+    padding: 13px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: var(--radius);
+    border: none;
+    background: var(--accent);
+    color: #0d1117;
+    cursor: pointer;
+    font-family: var(--sans);
+    transition: opacity 0.15s, transform 0.1s;
+    letter-spacing: 0.3px;
+  }
+  .btn-start:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-start:active { transform: scale(0.98); }
+  .err-name {
+    font-size: 12px;
+    color: var(--danger);
+    font-family: var(--mono);
+    min-height: 16px;
+    margin-top: -10px;
+    margin-bottom: 8px;
+    display: none;
+  }
+
+  /* Player greeting */
+  .player-greeting {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 5px 14px 5px 5px;
+    margin-bottom: 1rem;
+  }
+  .player-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #0d1117;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .player-name-display {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .player-change {
+    font-size: 11px;
+    color: var(--muted);
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 4px;
+  }
+  .player-change:hover { color: var(--accent); }
+
   /* Responsive */
   @media (max-width: 560px) {
     #board { grid-template-columns: 1fr; }
     .col-label { text-align: left; }
     h1 { font-size: 1.2rem; }
+    .welcome-card { padding: 2rem 1.25rem; }
   }
 </style>
 </head>
 <body>
 <div class="container">
+
+  <!-- WELCOME SCREEN -->
+  <div id="welcome-screen">
+    <div class="welcome-card">
+      <div class="welcome-logo">
+        <div class="logo-icon">A~</div>
+        <span class="logo-text">Arduino Quiz</span>
+      </div>
+      <h2 class="welcome-title">Empareja Pregunta &amp; Respuesta</h2>
+      <p class="welcome-sub">25 conceptos esenciales de programación con Arduino.<br>Ingresa tu nombre para comenzar.</p>
+
+      <div class="input-group">
+        <label for="player-name-input">Tu nombre</label>
+        <input class="name-input" id="player-name-input" type="text" placeholder="Ej: María García" maxlength="30" autocomplete="off" onkeydown="if(event.key==='Enter') launchGame()">
+        <span class="err-name" id="name-error">Por favor escribe tu nombre para continuar.</span>
+      </div>
+
+      <div class="diff-group">
+        <label for="difficulty-welcome">Dificultad</label>
+        <select id="difficulty-welcome">
+          <option value="5">Fácil — 5 pares</option>
+          <option value="8" selected>Normal — 8 pares</option>
+          <option value="12">Difícil — 12 pares</option>
+        </select>
+      </div>
+
+      <button class="btn-start" onclick="launchGame()">&#9654; Comenzar juego</button>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="game-screen" style="display:none">
 
   <div class="header">
     <div class="logo">
@@ -356,6 +544,14 @@
     </div>
     <h1>Empareja Pregunta &amp; Respuesta</h1>
     <p class="subtitle">25 conceptos esenciales de programación con Arduino</p>
+  </div>
+
+  <div style="display:flex; justify-content:center; margin-bottom:1rem;">
+    <div class="player-greeting" id="player-greeting">
+      <div class="player-avatar" id="player-avatar">M</div>
+      <span class="player-name-display" id="player-name-display">Jugador</span>
+      <span class="player-change" onclick="changePlayer()">cambiar</span>
+    </div>
   </div>
 
   <div class="stats-bar">
@@ -409,6 +605,7 @@
     Creado para estudiantes de informática &mdash; <a href="https://arduino.cc" target="_blank">arduino.cc</a>
   </div>
 
+  </div><!-- /game-screen -->
 </div>
 
 <script>
@@ -440,6 +637,7 @@ const ALL_QA = [
   { q: "¿Qué hace millis()?", a: "Retorna el número de milisegundos desde que la placa empezó a ejecutarse" }
 ];
 
+let playerName = '';
 let selQ = null, selA = null;
 let matched = 0, tries = 0, score = 0;
 let currentPairs = [], totalPairs = 8;
@@ -447,6 +645,44 @@ let roundNum = 1, totalRounds = 5;
 let usedIdx = [], lockBoard = false;
 
 const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+
+function launchGame() {
+  const input = document.getElementById('player-name-input');
+  const errEl = document.getElementById('name-error');
+  const name = input.value.trim();
+  if (!name) {
+    errEl.style.display = 'block';
+    input.focus();
+    return;
+  }
+  errEl.style.display = 'none';
+  playerName = name;
+
+  // Sync difficulty
+  const diffWelcome = document.getElementById('difficulty-welcome').value;
+  document.getElementById('difficulty').value = diffWelcome;
+
+  // Show player greeting
+  const initials = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+  document.getElementById('player-avatar').textContent = initials;
+  document.getElementById('player-name-display').textContent = name;
+  document.getElementById('player-greeting').style.display = 'flex';
+
+  // Switch screens
+  document.getElementById('welcome-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'block';
+
+  startGame();
+}
+
+function changePlayer() {
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('win-screen').style.display = 'none';
+  document.getElementById('board').style.display = 'grid';
+  document.getElementById('welcome-screen').style.display = 'flex';
+  document.getElementById('player-name-input').value = playerName;
+  document.getElementById('player-name-input').focus();
+}
 
 function getPairs(n) {
   let avail = ALL_QA.map((_, i) => i).filter(i => !usedIdx.includes(i));
@@ -559,7 +795,8 @@ function showWin() {
   document.getElementById('ws-tries').textContent = tries;
   const isLast = roundNum >= totalRounds;
   document.getElementById('win-badge').textContent = isLast ? 'JUEGO COMPLETO' : 'RONDA ' + roundNum + ' COMPLETADA';
-  document.getElementById('win-title').textContent = isLast ? '¡Felicitaciones!' : '¡Bien hecho!';
+  const firstName = playerName.split(' ')[0];
+  document.getElementById('win-title').textContent = isLast ? '¡Felicitaciones, ' + firstName + '!' : '¡Bien hecho, ' + firstName + '!';
   document.getElementById('win-msg').textContent = isLast
     ? 'Completaste las ' + totalRounds + ' rondas con ' + score + ' puntos totales. ¡Eres un experto en Arduino!'
     : 'Ronda ' + roundNum + ' de ' + totalRounds + ' superada. Precisión: ' + acc + '%. ¡Sigue así!';
@@ -572,8 +809,6 @@ function nextRound() {
   document.getElementById('board').style.display = 'grid';
   loadRound();
 }
-
-startGame();
 </script>
 </body>
 </html>
